@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { Book } from './schemas/book.schema';
 import * as mongoose from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { user } from './schemas/user.schema';
 
 @Injectable()
 export class BookService {
@@ -13,8 +14,10 @@ export class BookService {
 
     }
 
-    async create(book:Book) : Promise <Book> {
-        const newBooks = await this.bookModel.create(book)  
+    async create(book:Book , user: user) : Promise <Book> {
+
+      const data = Object.assign(book, {user: user._id})
+        const newBooks = await this.bookModel.create(data)  
     return newBooks
   }
 
